@@ -1,7 +1,7 @@
 document.getElementById('connectBtn').addEventListener('click', async function() {
     try {
         // Connect to the Solana wallet
-        const connection = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed');
+        const connection = new web3.Connection(web3.clusterApiUrl('https://devnet.helius-rpc.com/?api-key=292cdc81-9300-44bc-89f7-b8dc830da957'), 'confirmed');
         const provider = await web3.connect();
         const wallet = new web3.Wallet(provider);
 
