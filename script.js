@@ -1,9 +1,9 @@
 document.getElementById('connectBtn').addEventListener('click', async function() {
     try {
         // Connect to the Solana wallet
-        const connection = new web3.Connection(web3.clusterApiUrl('https://devnet.helius-rpc.com/?api-key=292cdc81-9300-44bc-89f7-b8dc830da957'), 'confirmed');
-        const provider = await web3.connect();
-        const wallet = new web3.Wallet(provider);
+        const connection = new solanaWeb3.Connection("https://solana-mainnet.core.chainstack.com/2517a9aa025865d20dcc7c47c06271c8", {wsEndpoint:"wss://solana-mainnet.core.chainstack.com/ws/2517a9aa025865d20dcc7c47c06271c8"});
+        const provider = await solanaWeb3.connect();
+        const wallet = new solanaWeb3.Wallet(provider);
 
         // Get the connected wallet address
         const publicKey = wallet.publicKey.toBase58();
