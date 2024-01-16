@@ -5,6 +5,7 @@ import './App.css';
 function App() {
 
   const [walletAddress, setWalletAddress] = useState(null)
+
   window.onload = async function(){
     try {
       if (window.solana){
@@ -45,7 +46,7 @@ const connectWallet =async ()=>{
             </button>
           </div>
         )}
-        {!walletAddress &&(
+        {walletAddress &&(
           <div>
             <p>
               Connected Account : {' '}
