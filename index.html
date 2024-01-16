@@ -1,122 +1,107 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<!-- Development (un-minified) -->
-<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
-<script type="module">
-    import { Buffer } from 'https://jspm.dev/buffer';
-    window.Buffer = Buffer;
-</script>
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!--stylesheet-->
+    <link rel="stylesheet" href="assets/css/style.css">
 
+    <!--bootstrapcdn-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
+    <!--fontawesomecdn-->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+
+    <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Abel&family=Dosis:wght@200&family=Handlee&display=swap"
+        rel="stylesheet">
+
+    <!--Meta Data-->
+    <title></title>
+    <meta id="title-meta" name="title" content="Your Name-Links">
+    <meta id="description-meta" name="description"
+        content="Your Description">
+
+    <meta name="keywords"
+        content="">
+
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+
+    <!-- Favicons -->
+    <link href="assets/img/boy.png" rel="icon">
+    <link href="assets/img/boy.png" rel="apple-touch-icon">
 
 </head>
+
 <body>
-<button onclick="connectWallet()">Connect</button>
-<input type="number" placeholder="Sol to send" id="quantity"/>
-<button onclick="signInTransactionAndSendMoney('var',10)">Send Money</button>
 
-<p id="status_p">Status: <span id="status">Disconnected</span></p>
-<script>
-var wallet;
-const lamports_per_sol= solanaWeb3.LAMPORTS_PER_SOL;
-function connectWallet(){
+    <!-- Profile picture-->
+    <img src="assets/img/boy.png" alt="profile picture" class="profile-picture">
 
-    (async() => {
-    try {
-    const resp = await window.solana.connect();
-    wallet = resp;
-    // 26qv4GCcx98RihuK3c4T6ozB3J7L6VwCuFVc7Ta2A3Uo 
-} catch (err) {
-    // { code: 4001, message: 'User rejected the request.' }
-}
-})();
-window.solana.on("connect", () => document.getElementById("status").innerText="Connected")
+    <!-- Profile name-->
+    <div class="profile-name"><b id="name_component"></b></div>
 
-}
+    <!-- Profile about-->
+    <div class="profile-about"><b id="description_component">Your Description</b></div>
+
+    <!-- Links-->
+    <div id="link-container">
+        <!-- This will be populated with links -->
+    </div>
 
 
-function signInTransactionAndSendMoney(destPubkeyStr,lamports){
+    <footer>
+        <div>
+            <div style="text-align: center;">
+                <a href="https://github.com/harindulk" target="_blank" class="hover , links-footer">
+                    <i class="fab fa-github"></i></a>
 
-    (async() => {
+                <a href="https://www.linkedin.com/in/harindulk/" target="_blank" class="hover , links-footer">
+                    <i class="fab fa-linkedin"></i></a>
 
-        const network = "https://api.devnet.solana.com";
-const connection = new solanaWeb3.Connection(network);
-const transaction = new solanaWeb3.Transaction();
+                <a href="https://twitter.com/Harindu_Fonseka" target="_blank" class="hover , links-footer">
+                    <i class="fab fa-twitter"></i></a>
 
-lamports = document.getElementById("quantity").value * lamports_per_sol;
+                <a href="https://www.youtube.com/channel/UCRyQGxzCgFb5wmsp1XAlWpQ" target="_blank"
+                    class="hover , links-footer">
+                    <i class="fab fa-youtube"></i></a>
 
-try {
-    destPubkeyStr = "4jj3EiZh3hFJhRsRp7L8VP91YYQCtnohrfgXCifoq7QQ"
-    lamports = document.getElementById("quantity").value * lamports_per_sol;
+                <a href="mailto:Harindu.dev@outlook.com" class="hover , links-footer">
+                    <i class="fas fa-envelope"></i></a>
+            </div>
+        </div>
 
-    console.log("starting sendMoney");
-    const destPubkey = new solanaWeb3.PublicKey(destPubkeyStr);
-    const walletAccountInfo = await connection.getAccountInfo(
-        wallet.publicKey
-    );
-    console.log("wallet data size", walletAccountInfo?.data.length);
+        <!--bottom text-->
+        <a href="http://www.harindu.dev" class="link-hide">
+            <div class="bottom-text">Harindulk
+                <i class="fas fa-times"></i>
+                Links
+            </div>
+        </a>
+    </footer>
 
-    const receiverAccountInfo = await connection.getAccountInfo(destPubkey);
-    console.log("receiver data size", receiverAccountInfo?.data.length);
+    <!--Javascript-->
+    <script src="assets/js/components.js"></script>
+    <script src="assets/config.js"></script>
+    <script src="assets/js/index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 
-    const instruction = solanaWeb3.SystemProgram.transfer({
-      fromPubkey: wallet.publicKey,
-      toPubkey: destPubkey,
-      lamports: solanaWeb3.LAMPORTS_PER_SOL * parseFloat(document.getElementById("quantity").value), // about half a SOL
-    });
-    let trans = await setWalletTransaction(instruction, connection);
-
-    let signature = await signAndSendTransaction(wallet, trans, connection);
-    let result = await connection.confirmTransaction(signature, "singleGossip");
-    console.log("money sent", result);
-  } catch (e) {
-    console.warn("Failed", e);
-  }
-
-
-    })()
- 
-     async function setWalletTransaction(
-  instruction,connection
-) {
-  const transaction = new solanaWeb3.Transaction();
-  transaction.add(instruction);
-  transaction.feePayer = wallet.publicKey;
-  let hash = await connection.getRecentBlockhash();
-  console.log("blockhash", hash);
-  transaction.recentBlockhash = hash.blockhash;
-  return transaction;
-}
-
- async function signAndSendTransaction(
-  wallet,
-  transaction,
-  connection
-) {
-     // Sign transaction, broadcast, and confirm
-    const { signature } = await window.solana.signAndSendTransaction(transaction);
-await connection.confirmTransaction(signature);
-
-
-  //let signedTrans = await wallet.signTransaction(transaction);
-  console.log("sign transaction");
-  //let signature = await connection.sendRawTransaction(signedTrans.serialize());
-  console.log("send raw transaction");
-  return signature;
-}
-
-}
-
-
-
-
-
-
-  
-    
-</script>
 </body>
+
 </html>
