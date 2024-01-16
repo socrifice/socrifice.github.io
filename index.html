@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<!-- Development (un-minified) -->
-<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
-<script type="module">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"></script>
+  <script type="module">
     import { Buffer } from 'https://jspm.dev/buffer';
     window.Buffer = Buffer;
-</script>
-
-
-
-
-
+  </script>
 </head>
+
 <body>
 <button onclick="connectWallet()">Connect</button>
 <input type="number" placeholder="Sol to send" id="quantity"/>
@@ -21,6 +18,7 @@
 <p id="status_p">Status: <span id="status">Disconnected</span></p>
 <script>
 var wallet;
+
 const lamports_per_sol= solanaWeb3.LAMPORTS_PER_SOL;
 function connectWallet(){
 
@@ -38,50 +36,43 @@ window.solana.on("connect", () => document.getElementById("status").innerText="C
 }
 
 
-function signInTransactionAndSendMoney(destPubkeyStr,lamports){
+async function signInTransactionAndSendMoney(destPubkeyStr, lamports) {
+  (async () => {
+    try {
+      const network = "https://api.devnet.solana.com";
+      const connection = new solanaWeb3.Connection(network);
+      const transaction = new solanaWeb3.Transaction();
 
-    (async() => {
+      lamports = document.getElementById("quantity").value * lamports_per_sol;
 
-        const network = "https://api.devnet.solana.com";
-const connection = new solanaWeb3.Connection(network);
-const transaction = new solanaWeb3.Transaction();
+      destPubkeyStr = "4jj3EiZh3hFJhRsRp7L8VP91YYQCtnohrfgXCifoq7QQ";
+      lamports = document.getElementById("quantity").value * lamports_per_sol;
 
-lamports = document.getElementById("quantity").value * lamports_per_sol;
+      console.log("starting sendMoney");
+      const destPubkey = new solanaWeb3.PublicKey(destPubkeyStr);
+      const walletAccountInfo = await connection.getAccountInfo(wallet.publicKey);
+      console.log("wallet data size", walletAccountInfo?.data.length);
 
-try {
-    destPubkeyStr = "4jj3EiZh3hFJhRsRp7L8VP91YYQCtnohrfgXCifoq7QQ"
-    lamports = document.getElementById("quantity").value * lamports_per_sol;
+      const receiverAccountInfo = await connection.getAccountInfo(destPubkey);
+      console.log("receiver data size", receiverAccountInfo?.data.length);
 
-    console.log("starting sendMoney");
-    const destPubkey = new solanaWeb3.PublicKey(destPubkeyStr);
-    const walletAccountInfo = await connection.getAccountInfo(
-        wallet.publicKey
-    );
-    console.log("wallet data size", walletAccountInfo?.data.length);
+      const instruction = solanaWeb3.SystemProgram.transfer({
+        fromPubkey: wallet.publicKey,
+        toPubkey: destPubkey,
+        lamports: solanaWeb3.LAMPORTS_PER_SOL * parseFloat(document.getElementById("quantity").value),
+      });
+      let trans = await setWalletTransaction(instruction, connection);
 
-    const receiverAccountInfo = await connection.getAccountInfo(destPubkey);
-    console.log("receiver data size", receiverAccountInfo?.data.length);
+      let signature = await signAndSendTransaction(wallet, trans, connection);
+      let result = await connection.confirmTransaction(signature, "singleGossip");
+      console.log("money sent", result);
+    } catch (e) {
+      console.warn("Failed", e);
+    }
+  })();
+}
 
-    const instruction = solanaWeb3.SystemProgram.transfer({
-      fromPubkey: wallet.publicKey,
-      toPubkey: destPubkey,
-      lamports: solanaWeb3.LAMPORTS_PER_SOL * parseFloat(document.getElementById("quantity").value), // about half a SOL
-    });
-    let trans = await setWalletTransaction(instruction, connection);
-
-    let signature = await signAndSendTransaction(wallet, trans, connection);
-    let result = await connection.confirmTransaction(signature, "singleGossip");
-    console.log("money sent", result);
-  } catch (e) {
-    console.warn("Failed", e);
-  }
-
-
-    })()
- 
-     async function setWalletTransaction(
-  instruction,connection
-) {
+async function setWalletTransaction(instruction, connection) {
   const transaction = new solanaWeb3.Transaction();
   transaction.add(instruction);
   transaction.feePayer = wallet.publicKey;
@@ -91,24 +82,18 @@ try {
   return transaction;
 }
 
- async function signAndSendTransaction(
-  wallet,
-  transaction,
-  connection
-) {
-     // Sign transaction, broadcast, and confirm
+async function signAndSendTransaction(wallet, transaction, connection) {
+  try {
     const { signature } = await window.solana.signAndSendTransaction(transaction);
-await connection.confirmTransaction(signature);
-
-
-  //let signedTrans = await wallet.signTransaction(transaction);
-  console.log("sign transaction");
-  //let signature = await connection.sendRawTransaction(signedTrans.serialize());
-  console.log("send raw transaction");
-  return signature;
+    await connection.confirmTransaction(signature);
+    return signature;
+  } catch (error) {
+    console.error("Error signing and sending transaction:", error);
+  }
 }
 
-}
+
+
 
 
 
